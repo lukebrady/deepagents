@@ -84,12 +84,13 @@ def create_model():
     """Create the appropriate model based on available API keys.
 
     Returns:
-        ChatModel instance (OpenAI or Anthropic)
+        ChatModel instance (OpenAI, xAI, or Anthropic)
 
     Raises:
         SystemExit if no API key is configured
     """
     openai_key = os.environ.get("OPENAI_API_KEY")
+    xai_key = os.environ.get("XAI_API_KEY")
     anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
 
     if openai_key:
@@ -100,6 +101,17 @@ def create_model():
         return ChatOpenAI(
             model=model_name,
             temperature=0.7,
+        )
+    if xai_key:
+        from langchain_openai import ChatOpenAI
+
+        model_name = os.environ.get("XAI_MODEL", "grok-4-fast-reasoning")
+        console.print(f"[dim]Using xAI model: {model_name}[/dim]")
+        return ChatOpenAI(
+            model=model_name,
+            temperature=0.7,
+            api_key=xai_key,
+            base_url="https://api.x.ai/v1",
         )
     if anthropic_key:
         from langchain_anthropic import ChatAnthropic
@@ -113,8 +125,9 @@ def create_model():
     console.print("[bold red]Error:[/bold red] No API key configured.")
     console.print("\nPlease set one of the following environment variables:")
     console.print("  - OPENAI_API_KEY     (for OpenAI models like gpt-5-mini)")
+    console.print("  - XAI_API_KEY        (for xAI Grok models)")
     console.print("  - ANTHROPIC_API_KEY  (for Claude models)")
     console.print("\nExample:")
-    console.print("  export OPENAI_API_KEY=your_api_key_here")
+    console.print("  export XAI_API_KEY=your_api_key_here")
     console.print("\nOr add it to your .env file.")
     sys.exit(1)
