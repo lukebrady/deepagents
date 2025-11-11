@@ -10,7 +10,7 @@ from .commands import execute_bash_command, handle_command
 from .config import COLORS, DEEP_AGENTS_ASCII, SessionState, console, create_model
 from .execution import execute_task
 from .input import create_prompt_session
-from .tools import fetch_url, http_request, tavily_client, web_search
+from .tools import brave_api_key, fetch_url, http_request, tavily_client, web_search
 from .ui import TokenTracker, show_help
 
 
@@ -99,18 +99,23 @@ async def simple_cli(agent, assistant_id: str | None, session_state, baseline_to
     console.print(DEEP_AGENTS_ASCII, style=f"bold {COLORS['primary']}")
     console.print()
 
-    if tavily_client is None:
+    if brave_api_key is None and tavily_client is None:
         console.print(
-            "[yellow]⚠ Web search disabled:[/yellow] TAVILY_API_KEY not found.",
+            "[yellow]⚠ Web search disabled:[/yellow] No search API key found.",
             style=COLORS["dim"],
         )
-        console.print("  To enable web search, set your Tavily API key:", style=COLORS["dim"])
+        console.print("  To enable web search, set either:", style=COLORS["dim"])
+        console.print("    export BRAVE_API_KEY=your_api_key_here (recommended - cheaper)", style=COLORS["dim"])
         console.print("    export TAVILY_API_KEY=your_api_key_here", style=COLORS["dim"])
         console.print(
-            "  Or add it to your .env file. Get your key at: https://tavily.com",
+            "  Or add it to your .env file. Get keys at: https://brave.com/search/api/ or https://tavily.com",
             style=COLORS["dim"],
         )
         console.print()
+    elif brave_api_key is not None:
+        console.print("  [dim]Web search: Brave API[/dim]")
+    elif tavily_client is not None:
+        console.print("  [dim]Web search: Tavily API[/dim]")
 
     console.print("... Ready to code! What would you like to build?", style=COLORS["agent"])
     console.print(f"  [dim]Working directory: {Path.cwd()}[/dim]")
@@ -180,7 +185,7 @@ async def main(assistant_id: str, session_state):
 
     # Create agent with conditional tools
     tools = [http_request, fetch_url]
-    if tavily_client is not None:
+    if brave_api_key is not None or tavily_client is not None:
         tools.append(web_search)
 
     agent = create_agent_with_config(model, assistant_id, tools)

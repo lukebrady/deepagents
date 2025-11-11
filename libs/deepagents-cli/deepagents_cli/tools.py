@@ -7,6 +7,9 @@ import requests
 from markdownify import markdownify
 from tavily import TavilyClient
 
+# Initialize Brave API key if available
+brave_api_key = os.environ.get("BRAVE_API_KEY")
+
 # Initialize Tavily client if API key is available
 tavily_client = (
     TavilyClient(api_key=os.environ.get("TAVILY_API_KEY"))
@@ -90,13 +93,53 @@ def http_request(
         }
 
 
+def _search_with_brave(query: str, max_results: int = 5) -> dict[str, Any]:
+    """Search the web using Brave Search API.
+
+    Args:
+        query: The search query
+        max_results: Number of results to return
+
+    Returns:
+        Dictionary in Tavily-compatible format with search results
+    """
+    try:
+        response = requests.get(
+            "https://api.search.brave.com/res/v1/web/search",
+            params={"q": query, "count": max_results},
+            headers={
+                "Accept": "application/json",
+                "Accept-Encoding": "gzip",
+                "X-Subscription-Token": brave_api_key,
+            },
+            timeout=30,
+        )
+        response.raise_for_status()
+        data = response.json()
+
+        # Transform Brave response to Tavily-compatible format
+        results = []
+        if "web" in data and "results" in data["web"]:
+            for item in data["web"]["results"]:
+                results.append({
+                    "title": item.get("title", ""),
+                    "url": item.get("url", ""),
+                    "content": item.get("description", ""),
+                    "score": 1.0,  # Brave doesn't provide scores
+                })
+
+        return {"results": results, "query": query}
+    except Exception as e:
+        return {"error": f"Brave Search error: {e!s}", "query": query}
+
+
 def web_search(
     query: str,
     max_results: int = 5,
     topic: Literal["general", "news", "finance"] = "general",
     include_raw_content: bool = False,
 ):
-    """Search the web using Tavily for current information and documentation.
+    """Search the web for current information and documentation.
 
     This tool searches the web and returns relevant results. After receiving results,
     you MUST synthesize the information into a natural, helpful response for the user.
@@ -123,9 +166,13 @@ def web_search(
     4. Cite sources by mentioning the page titles or URLs
     5. NEVER show the raw JSON to the user - always provide a formatted response
     """
+    # Prefer Brave API (cheaper) if available, otherwise use Tavily
+    if brave_api_key:
+        return _search_with_brave(query, max_results)
+
     if tavily_client is None:
         return {
-            "error": "Tavily API key not configured. Please set TAVILY_API_KEY environment variable.",
+            "error": "No web search API configured. Please set BRAVE_API_KEY or TAVILY_API_KEY environment variable.",
             "query": query,
         }
 
