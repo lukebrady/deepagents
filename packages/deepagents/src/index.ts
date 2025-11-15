@@ -35,5 +35,8 @@ export {
 } from './tools/index.js';
 export type { TodoItem, TodoStatusType, TaskToolConfig } from './tools/index.js';
 
+// Export agent factory
+export { createDeepAgent, getAgentBackend } from './agent.js';
+
 // Export utilities (for advanced users)
 export * from './utils/index.js';
