@@ -2,8 +2,7 @@
  * Brave Search API tool.
  */
 
-import mastraCore from '@mastra/core';
-const { createTool } = mastraCore;
+import { createTool } from '@mastra/core';
 import { z } from 'zod';
 
 export interface BraveSearchConfig {

@@ -5,9 +5,8 @@
  * that integrate with the Mastra framework.
  */
 
-// Import Mastra as CommonJS default import
-import mastraCore from '@mastra/core';
-const { Agent, createTool } = mastraCore;
+// Import Mastra (ESM named imports)
+import { Agent, createTool } from '@mastra/core';
 
 import { anthropic } from '@ai-sdk/anthropic';
 import { openai } from '@ai-sdk/openai';

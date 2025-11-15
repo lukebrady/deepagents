@@ -4,8 +4,7 @@
  * Helps agents manage multi-step tasks by creating and updating a todo list.
  */
 
-import mastraCore from '@mastra/core';
-const { createTool } = mastraCore;
+import { createTool } from '@mastra/core';
 import { z } from 'zod';
 
 /**

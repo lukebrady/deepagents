@@ -5,8 +5,7 @@
  * This tool allows agents to run shell commands and receive output.
  */
 
-import mastraCore from '@mastra/core';
-const { createTool } = mastraCore;
+import { createTool } from '@mastra/core';
 import { z } from 'zod';
 import { exec } from 'child_process';
 import { promisify } from 'util';
