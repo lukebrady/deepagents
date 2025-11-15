@@ -213,3 +213,10 @@ __marimo__/
 .claude
 
 .idea
+
+# Node.js / TypeScript
+node_modules/
+*.tsbuildinfo
+dist/
+*.log
+.pnpm-store/
