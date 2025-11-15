@@ -1,0 +1,73 @@
+{
+  "name": "@deepagents/cli",
+  "version": "0.1.0",
+  "description": "Deep Agents CLI - Interactive command-line interface for AI agents",
+  "type": "module",
+  "bin": {
+    "deepagents": "./dist/index.js",
+    "da": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "prompts",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "ai",
+    "cli",
+    "agents",
+    "deepagents",
+    "mastra",
+    "typescript",
+    "interactive"
+  ],
+  "author": "Deep Agents Team",
+  "license": "MIT",
+  "dependencies": {
+    "@deepagents/core": "workspace:*",
+    "@mastra/core": "^0.1.0",
+    "@ai-sdk/anthropic": "^1.0.0",
+    "@ai-sdk/openai": "^1.0.0",
+    "@ai-sdk/xai": "^1.0.0",
+    "commander": "^12.0.0",
+    "chalk": "^5.3.0",
+    "ora": "^8.0.0",
+    "enquirer": "^2.4.0",
+    "marked": "^12.0.0",
+    "marked-terminal": "^7.0.0",
+    "turndown": "^7.2.0",
+    "node-fetch": "^3.3.0",
+    "dotenv": "^16.4.0",
+    "conf": "^12.0.0",
+    "highlight.js": "^11.9.0",
+    "diff": "^5.2.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/diff": "^5.2.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.0.0",
+    "tsup": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
