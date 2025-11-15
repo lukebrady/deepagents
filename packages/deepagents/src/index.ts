@@ -19,5 +19,21 @@ export type {
   FilesystemBackendConfig,
 } from './backends/index.js';
 
+// Export tools
+export {
+  createLsTool,
+  createReadFileTool,
+  createWriteFileTool,
+  createEditFileTool,
+  createGrepSearchTool,
+  createGlobSearchTool,
+  createFilesystemTools,
+  createTodoListTool,
+  createTaskTool,
+  TodoStatus,
+  TodoItemSchema,
+} from './tools/index.js';
+export type { TodoItem, TodoStatusType, TaskToolConfig } from './tools/index.js';
+
 // Export utilities (for advanced users)
 export * from './utils/index.js';
