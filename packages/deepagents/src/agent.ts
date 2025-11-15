@@ -8,6 +8,7 @@
 import { Agent } from '@mastra/core';
 import { anthropic } from '@ai-sdk/anthropic';
 import { openai } from '@ai-sdk/openai';
+import { xai } from '@ai-sdk/xai';
 import type { DeepAgentConfig } from './types/agent.js';
 import type { BackendProtocol } from './types/backend.js';
 import { StateBackend } from './backends/state-backend.js';
@@ -49,6 +50,8 @@ function resolveModelName(model: string): string {
     haiku: 'claude-3-5-haiku-20241022',
     'gpt-4': 'gpt-4-turbo-preview',
     'gpt-3.5': 'gpt-3.5-turbo',
+    grok: 'grok-beta',
+    'grok-2': 'grok-2-1212',
   };
 
   return modelMap[model] || model;
@@ -63,6 +66,9 @@ function getModelProvider(modelName: string) {
   }
   if (modelName.startsWith('gpt') || modelName.includes('openai')) {
     return openai(modelName);
+  }
+  if (modelName.startsWith('grok') || modelName.includes('xai')) {
+    return xai(modelName);
   }
   // Default to anthropic
   return anthropic(modelName);

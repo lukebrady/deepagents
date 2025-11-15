@@ -45,6 +45,20 @@ tsx examples/research-agent.ts
 - Parallel research workflows
 - Synthesizing results from multiple subagents
 
+### 4. X.AI Agent (`xai-agent.ts`)
+
+Using X.AI's Grok models with Deep Agents.
+
+```bash
+tsx examples/xai-agent.ts
+```
+
+**Demonstrates:**
+- Using Grok models (grok-beta, grok-2)
+- Model shortcuts for X.AI
+- Real-time information access
+- Custom system prompts for Grok
+
 ## Running Examples
 
 ### Prerequisites
@@ -62,9 +76,14 @@ pnpm build
 Set your API key before running examples:
 
 ```bash
+# For Claude models
 export ANTHROPIC_API_KEY="your-key-here"
-# or
+
+# For GPT models
 export OPENAI_API_KEY="your-key-here"
+
+# For Grok models
+export XAI_API_KEY="your-key-here"
 ```
 
 ### Running

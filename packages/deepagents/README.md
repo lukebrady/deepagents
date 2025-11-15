@@ -17,7 +17,7 @@ TypeScript implementation of Deep Agents - A powerful agent framework with file 
 
 - **Agent Factory**: Simple API to create fully-configured agents ✅
   - `createDeepAgent()` - One function to create agents with all tools
-  - Support for multiple LLM providers (Anthropic, OpenAI)
+  - Support for multiple LLM providers (Anthropic, OpenAI, X.AI)
   - Configurable backends, tools, and system prompts
 
 - **Subagent Spawning**: Create isolated subagents for complex tasks ✅
@@ -111,6 +111,29 @@ const agent = createDeepAgent({
 });
 ```
 
+### Agent with X.AI (Grok)
+
+```typescript
+import { createDeepAgent, StateBackend } from '@deepagents/core';
+
+// Using Grok model
+const agent = createDeepAgent({
+  model: 'grok', // Shorthand for grok-beta
+  backend: new StateBackend(),
+  system_prompt: 'You are a helpful AI assistant powered by Grok...',
+});
+
+// Or use Grok-2 for advanced reasoning
+const grok2Agent = createDeepAgent({
+  model: 'grok-2', // grok-2-1212
+  backend: new StateBackend(),
+});
+
+const result = await agent.generate({
+  messages: [{ role: 'user', content: 'Create a TypeScript utility file' }],
+});
+```
+
 ### Agent with Custom Subagents
 
 ```typescript
@@ -153,7 +176,7 @@ const result = await agent.generate({
 Create a fully-configured Deep Agent with Mastra.
 
 **Parameters:**
-- `config.model` (string, optional): Model to use. Supports shortcuts like 'sonnet', 'opus', 'haiku' or full names. Default: 'claude-sonnet-4-5-20250929'
+- `config.model` (string, optional): Model to use. Supports shortcuts like 'sonnet', 'opus', 'haiku', 'grok', 'grok-2', 'gpt-4' or full model names. Default: 'claude-sonnet-4-5-20250929'
 - `config.backend` (BackendProtocol, optional): Backend for file operations. Default: StateBackend
 - `config.subagents` (SubAgent[], optional): Custom subagents for task delegation
 - `config.system_prompt` (string, optional): Custom system prompt
