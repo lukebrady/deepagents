@@ -59,6 +59,21 @@ tsx examples/xai-agent.ts
 - Real-time information access
 - Custom system prompts for Grok
 
+### 5. Streaming Agent (`streaming-agent.ts`)
+
+Real-time streaming responses with Deep Agents.
+
+```bash
+tsx examples/streaming-agent.ts
+```
+
+**Demonstrates:**
+- Streaming text responses in real-time
+- Processing stream events (text-delta, tool-call, tool-result)
+- Using `agent.stream()` instead of `agent.generate()`
+- Accessing fullStream for complete event handling
+- Building interactive CLI experiences
+
 ## Running Examples
 
 ### Prerequisites

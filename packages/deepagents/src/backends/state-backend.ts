@@ -18,8 +18,8 @@ import {
   fileDataToString,
   formatReadResponse,
   updateFileData,
-  performStringReplacement,
 } from '../utils/file-data.js';
+import { performStringReplacement } from '../utils/string-replacement.js';
 import { grepMatchesFromFiles, globSearchFiles } from '../utils/grep.js';
 
 /**

@@ -149,9 +149,53 @@ export function createDeepAgent(config: DeepAgentConfig = {}): Agent {
   const taskTool = createTaskTool({
     subagents,
     executeSubagent: async (taskConfig) => {
-      // This is a placeholder - full implementation will spawn actual subagents
-      // For now, return a message indicating the task would be executed
-      return `[Subagent "${taskConfig.subagent_type}" task] ${taskConfig.description}\n\nPrompt: ${taskConfig.prompt}\n\n(Full subagent execution will be implemented in a future update)`;
+      // Find the requested subagent configuration
+      const subagentConfig = subagents.find((s) => s.name === taskConfig.subagent_type);
+
+      // If it's a compiled subagent with a pre-built runnable, use it directly
+      if (subagentConfig && 'runnable' in subagentConfig) {
+        const result = await subagentConfig.runnable.generate({
+          messages: [{ role: 'user', content: taskConfig.prompt }],
+        });
+        return result.text || '';
+      }
+
+      // Otherwise, create a new agent instance for this subagent
+      const subagentSystemPrompt = subagentConfig?.system_prompt || system_prompt;
+      const subagentModel = taskConfig.model
+        ? resolveModelName(taskConfig.model)
+        : subagentConfig?.model
+          ? resolveModelName(subagentConfig.model)
+          : modelName;
+
+      // Determine which tools to provide to the subagent
+      let subagentTools = subagentConfig?.tools || {};
+      if (subagentConfig?.inherit_tools) {
+        // Inherit tools from parent (filesystem + planning)
+        subagentTools = {
+          ...filesystemTools,
+          writeTodos: todoTool,
+          ...subagentTools,
+        };
+      } else if (Object.keys(subagentTools).length === 0) {
+        // If no tools specified and not inheriting, give filesystem tools by default
+        subagentTools = filesystemTools;
+      }
+
+      // Create the subagent
+      const subagent = new Agent({
+        name: `Subagent: ${taskConfig.subagent_type}`,
+        instructions: subagentSystemPrompt,
+        model: getModelProvider(subagentModel),
+        tools: subagentTools,
+      });
+
+      // Execute the subagent with the given prompt
+      const result = await subagent.generate({
+        messages: [{ role: 'user', content: taskConfig.prompt }],
+      });
+
+      return result.text || '';
     },
   });
 

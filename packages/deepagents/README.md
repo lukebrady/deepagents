@@ -24,6 +24,12 @@ TypeScript implementation of Deep Agents - A powerful agent framework with file 
   - Custom subagent definitions
   - Context isolation
   - Parallel task execution
+  - Full execution with Mastra agents
+
+- **Streaming Support**: Real-time response streaming ✅
+  - Text streaming via `agent.stream()`
+  - Event-based streaming (text-delta, tool-call, tool-result)
+  - Built on Mastra's native streaming capabilities
 
 ## Installation
 
@@ -167,6 +173,36 @@ const result = await agent.generate({
     },
   ],
 });
+```
+
+### Streaming Responses
+
+```typescript
+import { createDeepAgent, StateBackend } from '@deepagents/core';
+
+const agent = createDeepAgent({
+  model: 'sonnet',
+  backend: new StateBackend(),
+});
+
+// Stream text in real-time
+const stream = await agent.stream({
+  messages: [{ role: 'user', content: 'Create a utility file' }],
+});
+
+// Simple text streaming
+for await (const chunk of stream.textStream) {
+  process.stdout.write(chunk);
+}
+
+// Or access full event stream for tool calls
+for await (const event of stream.fullStream) {
+  if (event.type === 'text-delta') {
+    console.log(event.textDelta);
+  } else if (event.type === 'tool-call') {
+    console.log(`Tool called: ${event.toolName}`);
+  }
+}
 ```
 
 ## API Reference
