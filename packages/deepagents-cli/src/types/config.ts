@@ -9,7 +9,7 @@ import { z } from 'zod';
  */
 export const ConfigSchema = z.object({
   /** Default model to use */
-  model: z.string().default('claude-sonnet-4-5-20250929'),
+  model: z.string().default('grok'),
 
   /** Default agent name */
   defaultAgent: z.string().default('default'),
@@ -34,6 +34,7 @@ export const ConfigSchema = z.object({
     anthropic: z.string().optional(),
     openai: z.string().optional(),
     xai: z.string().optional(),
+    braveSearch: z.string().optional(),
     tavily: z.string().optional(),
   }).default({}),
 });

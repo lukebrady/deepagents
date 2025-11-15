@@ -6,11 +6,15 @@ Interactive command-line interface for Deep Agents powered by Mastra.
 
 - **Interactive REPL**: Chat with AI agents in your terminal
 - **Multiple Agents**: Create, switch, and manage multiple agents
-- **Streaming Responses**: Real-time streaming output
-- **Rich Terminal UI**: Syntax highlighting, colors, and formatting
+- **Streaming Responses**: Real-time streaming output with tool call tracking
+- **Rich Terminal UI**: Syntax highlighting, markdown rendering, colors
 - **Slash Commands**: Built-in commands for agent management
-- **File Operations**: Automatic file operation tracking
-- **Multiple Providers**: Support for Anthropic, OpenAI, and X.AI
+- **File Operations**: Automatic file operation tracking with diffs
+- **Web Search**: Brave Search integration for real-time information
+- **HTTP Tools**: Make API calls and fetch URLs with HTML-to-Markdown conversion
+- **HITL Workflow**: Human-in-the-Loop tool approval for safety
+- **Multiple Providers**: Support for X.AI (Grok), Anthropic (Claude), OpenAI (GPT)
+- **Default**: Uses X.AI's Grok and Brave Search by default
 
 ## Installation
 
@@ -57,15 +61,16 @@ Create a `.deepagentsrc.json` file in your home directory or project root:
 
 ```json
 {
-  "model": "claude-sonnet-4-5-20250929",
+  "model": "grok",
   "defaultAgent": "default",
   "streaming": true,
   "trackTokens": true,
   "theme": "auto",
   "apiKeys": {
-    "anthropic": "your-key-here",
-    "openai": "your-key-here",
-    "xai": "your-key-here"
+    "xai": "your-xai-key-here",
+    "braveSearch": "your-brave-key-here",
+    "anthropic": "your-anthropic-key-here",
+    "openai": "your-openai-key-here"
   }
 }
 ```
@@ -75,13 +80,16 @@ Create a `.deepagentsrc.json` file in your home directory or project root:
 You can also configure the CLI using environment variables:
 
 ```bash
-# API Keys
-export ANTHROPIC_API_KEY="your-key"
-export OPENAI_API_KEY="your-key"
-export XAI_API_KEY="your-key"
+# API Keys (defaults)
+export XAI_API_KEY="your-xai-key"
+export BRAVE_SEARCH_API_KEY="your-brave-key"
+
+# Optional API Keys
+export ANTHROPIC_API_KEY="your-anthropic-key"
+export OPENAI_API_KEY="your-openai-key"
 
 # Configuration
-export DEEPAGENTS_MODEL="sonnet"
+export DEEPAGENTS_MODEL="grok"
 export DEEPAGENTS_VERBOSE="true"
 ```
 

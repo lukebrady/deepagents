@@ -5,6 +5,7 @@
 import { createDeepAgent, StateBackend, getAgentBackend } from '@deepagents/core';
 import type { Agent } from '@mastra/core';
 import type { Config } from '../types/config.js';
+import { createBraveSearchTool, createHttpRequestTool, createFetchUrlTool } from '../tools/index.js';
 
 /**
  * Agent registry for managing multiple agents.
@@ -23,10 +24,22 @@ export class AgentManager {
    * Create a new agent.
    */
   createAgent(name: string, options: { model?: string; systemPrompt?: string } = {}): Agent {
+    // Create custom CLI tools
+    const webSearchTool = createBraveSearchTool({
+      apiKey: this.config.apiKeys.braveSearch,
+    });
+    const httpRequestTool = createHttpRequestTool();
+    const fetchUrlTool = createFetchUrlTool();
+
     const agent = createDeepAgent({
       model: options.model || this.config.model,
       backend: new StateBackend(),
       system_prompt: options.systemPrompt,
+      tools: {
+        web_search: webSearchTool,
+        http_request: httpRequestTool,
+        fetch_url: fetchUrlTool,
+      },
     });
 
     this.agents.set(name, agent);

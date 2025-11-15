@@ -44,6 +44,7 @@ export function loadConfig(): Config {
       anthropic: process.env.ANTHROPIC_API_KEY,
       openai: process.env.OPENAI_API_KEY,
       xai: process.env.XAI_API_KEY,
+      braveSearch: process.env.BRAVE_SEARCH_API_KEY,
       tavily: process.env.TAVILY_API_KEY,
     },
   };
@@ -63,6 +64,6 @@ export function loadConfig(): Config {
 /**
  * Get API key for a provider.
  */
-export function getApiKey(provider: 'anthropic' | 'openai' | 'xai' | 'tavily', config: Config): string | undefined {
+export function getApiKey(provider: 'anthropic' | 'openai' | 'xai' | 'braveSearch' | 'tavily', config: Config): string | undefined {
   return config.apiKeys[provider];
 }
