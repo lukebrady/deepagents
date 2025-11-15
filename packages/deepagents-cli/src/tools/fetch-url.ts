@@ -2,7 +2,8 @@
  * Fetch URL tool with HTML to Markdown conversion.
  */
 
-import { createTool } from '@mastra/core/tools';
+import mastraCore from '@mastra/core';
+const { createTool } = mastraCore;
 import { z } from 'zod';
 import TurndownService from 'turndown';
 

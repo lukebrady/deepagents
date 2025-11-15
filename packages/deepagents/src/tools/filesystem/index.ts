@@ -5,7 +5,8 @@
  * using a pluggable backend system.
  */
 
-import { createTool } from '@mastra/core/tools';
+import mastraCore from '@mastra/core';
+const { createTool } = mastraCore;
 import { z } from 'zod';
 import type { BackendProtocol } from '../../types/backend.js';
 

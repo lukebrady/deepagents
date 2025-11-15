@@ -5,9 +5,10 @@
  * that integrate with the Mastra framework.
  */
 
-// TODO: Fix Agent type - Mastra's type exports may be incomplete
-// Agent exists at runtime but TypeScript can't find the type export
-import { Agent } from '@mastra/core';
+// Import Mastra as CommonJS default import
+import mastraCore from '@mastra/core';
+const { Agent, createTool } = mastraCore;
+
 import { anthropic } from '@ai-sdk/anthropic';
 import { openai } from '@ai-sdk/openai';
 import { xai } from '@ai-sdk/xai';

@@ -9,7 +9,12 @@
 export type * from './types/index.js';
 
 // Export backends
-export { StateBackend, FilesystemBackend, CompositeBackend } from './backends/index.js';
+export {
+  StateBackend,
+  FilesystemBackend,
+  CompositeBackend,
+  StoreBackend,
+} from './backends/index.js';
 export type {
   BackendProtocol,
   FileInfo,
@@ -17,6 +22,7 @@ export type {
   WriteResult,
   EditResult,
   FilesystemBackendConfig,
+  StoreBackendConfig,
 } from './backends/index.js';
 
 // Export tools
@@ -30,10 +36,17 @@ export {
   createFilesystemTools,
   createTodoListTool,
   createTaskTool,
+  createShellTool,
+  createRestrictedShellTool,
   TodoStatus,
   TodoItemSchema,
 } from './tools/index.js';
-export type { TodoItem, TodoStatusType, TaskToolConfig } from './tools/index.js';
+export type {
+  TodoItem,
+  TodoStatusType,
+  TaskToolConfig,
+  ShellToolConfig,
+} from './tools/index.js';
 
 // Export agent factory
 export { createDeepAgent, getAgentBackend } from './agent.js';

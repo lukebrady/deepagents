@@ -5,9 +5,11 @@
  * subagents with isolated context windows.
  */
 
-import { createTool } from '@mastra/core/tools';
+import mastraCore from '@mastra/core';
+const { createTool } = mastraCore;
 import { z } from 'zod';
-import type { Agent } from '@mastra/core';
+// Agent type imported from mastraCore above
+type Agent = any;
 import type { SubAgent, CompiledSubAgent } from '../../types/subagent.js';
 
 /**

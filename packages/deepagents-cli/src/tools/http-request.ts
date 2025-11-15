@@ -2,7 +2,8 @@
  * HTTP request tool for making API calls.
  */
 
-import { createTool } from '@mastra/core/tools';
+import mastraCore from '@mastra/core';
+const { createTool } = mastraCore;
 import { z } from 'zod';
 
 /**
