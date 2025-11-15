@@ -5,10 +5,10 @@ TypeScript implementation of Deep Agents - A powerful agent framework with file 
 ## Features
 
 - **Pluggable Backends**: Multiple storage backends for file operations
-  - `StateBackend`: In-memory storage (ephemeral)
-  - `FilesystemBackend`: Disk-based storage (coming soon)
+  - `StateBackend`: In-memory storage (ephemeral) ✅
+  - `FilesystemBackend`: Disk-based storage with virtual mode ✅
+  - `CompositeBackend`: Route operations to different backends ✅
   - `StoreBackend`: Persistent storage with Mastra (coming soon)
-  - `CompositeBackend`: Route operations to different backends (coming soon)
 
 - **File System Tools**: Complete file operations with Mastra-compatible tools
   - List files and directories
@@ -60,21 +60,23 @@ This is an early preview release. The library is under active development as par
 ### Completed (Phase 1 & 2)
 - ✅ Project structure and build configuration
 - ✅ Type definitions (BackendProtocol, FileInfo, GrepMatch, etc.)
-- ✅ Utility functions (formatting, path validation, string replacement)
-- ✅ StateBackend implementation
-- ✅ Comprehensive test suite for StateBackend
+- ✅ Utility functions (formatting, path validation, string replacement, grep)
+- ✅ StateBackend implementation with comprehensive tests
+- ✅ FilesystemBackend with virtual mode, security features, and ripgrep support
+- ✅ CompositeBackend for routing operations to different backends
+- ✅ Comprehensive test suites for all backends (>90% coverage)
 
-### In Progress
-- 🚧 FilesystemBackend implementation
-- 🚧 Mastra tool integrations
-- 🚧 Agent factory (createDeepAgent)
+### In Progress (Phase 3)
+- 🚧 Mastra tool integrations (filesystem tools)
+- 🚧 Planning tools (TodoList)
+- 🚧 Subagent tool (task)
 
-### Planned
+### Planned (Phase 4+)
 - 📋 StoreBackend for persistent storage
-- 📋 CompositeBackend for routing
+- 📋 Agent factory (createDeepAgent)
+- 📋 Full Mastra integration with agent creation
 - 📋 Subagent spawning system
-- 📋 Planning tools (TodoList)
-- 📋 Full Mastra integration
+- 📋 Example projects
 
 ## Documentation
 

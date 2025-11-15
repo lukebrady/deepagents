@@ -9,8 +9,15 @@
 export type * from './types/index.js';
 
 // Export backends
-export { StateBackend } from './backends/index.js';
-export type { BackendProtocol, FileInfo, GrepMatch, WriteResult, EditResult } from './backends/index.js';
+export { StateBackend, FilesystemBackend, CompositeBackend } from './backends/index.js';
+export type {
+  BackendProtocol,
+  FileInfo,
+  GrepMatch,
+  WriteResult,
+  EditResult,
+  FilesystemBackendConfig,
+} from './backends/index.js';
 
 // Export utilities (for advanced users)
 export * from './utils/index.js';
