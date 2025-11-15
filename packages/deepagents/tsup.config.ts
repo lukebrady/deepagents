@@ -7,7 +7,7 @@ export default defineConfig({
     'tools/index': 'src/tools/index.ts',
   },
   format: ['esm'],
-  dts: true,
+  dts: false, // Disabled temporarily due to Mastra type export issues
   sourcemap: true,
   clean: true,
   splitting: false,

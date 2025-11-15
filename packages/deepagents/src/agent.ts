@@ -5,12 +5,17 @@
  * that integrate with the Mastra framework.
  */
 
+// TODO: Fix Agent type - Mastra's type exports may be incomplete
+// Agent exists at runtime but TypeScript can't find the type export
 import { Agent } from '@mastra/core';
 import { anthropic } from '@ai-sdk/anthropic';
 import { openai } from '@ai-sdk/openai';
 import { xai } from '@ai-sdk/xai';
 import type { DeepAgentConfig } from './types/agent.js';
 import type { BackendProtocol } from './types/backend.js';
+
+// Type alias for Agent (workaround for missing type export)
+type AgentInstance = any;
 import { StateBackend } from './backends/state-backend.js';
 import { createFilesystemTools } from './tools/filesystem/index.js';
 import { createTodoListTool } from './tools/planning/todo-list.js';
@@ -125,7 +130,7 @@ function getModelProvider(modelName: string) {
  * });
  * ```
  */
-export function createDeepAgent(config: DeepAgentConfig = {}): Agent {
+export function createDeepAgent(config: DeepAgentConfig = {}): AgentInstance {
   const {
     model = 'claude-sonnet-4-5-20250929',
     backend = new StateBackend(),
@@ -233,6 +238,6 @@ export function createDeepAgent(config: DeepAgentConfig = {}): Agent {
  * @param agent - Agent instance
  * @returns Backend instance or undefined
  */
-export function getAgentBackend(agent: Agent): BackendProtocol | undefined {
+export function getAgentBackend(agent: AgentInstance): BackendProtocol | undefined {
   return (agent as any).__backend;
 }

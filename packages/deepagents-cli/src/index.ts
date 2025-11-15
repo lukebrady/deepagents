@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * Deep Agents CLI entry point.
  */
