@@ -5,7 +5,9 @@
 export { StateBackend } from './state-backend.js';
 export { FilesystemBackend } from './filesystem-backend.js';
 export { CompositeBackend } from './composite-backend.js';
+export { StoreBackend } from './store-backend.js';
 export type { FilesystemBackendConfig } from './filesystem-backend.js';
+export type { StoreBackendConfig } from './store-backend.js';
 export type {
   BackendProtocol,
   FileInfo,

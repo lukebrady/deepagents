@@ -51,7 +51,7 @@ export class CLI {
     this.printWelcome();
 
     // Get initial agent
-    this.session.agent = this.agentManager.getCurrentAgent();
+    this.session.agent = await this.agentManager.getCurrentAgent();
     this.session.backend = this.agentManager.getAgentBackend();
 
     // Main loop
@@ -128,8 +128,8 @@ export class CLI {
         break;
 
       case 'reset':
-        this.agentManager.resetAgent();
-        this.session.agent = this.agentManager.getCurrentAgent();
+        await this.agentManager.resetAgent();
+        this.session.agent = await this.agentManager.getCurrentAgent();
         this.session.messages = [];
         console.log(renderSystemMessage('Agent reset'));
         break;
@@ -143,7 +143,7 @@ export class CLI {
           console.log(renderError('Usage: /switch <agent-name>'));
         } else {
           const agentName = args[0];
-          this.session.agent = this.agentManager.switchAgent(agentName);
+          this.session.agent = await this.agentManager.switchAgent(agentName);
           this.session.agentName = agentName;
           console.log(renderSystemMessage(`Switched to agent: ${agentName}`));
         }
