@@ -107,7 +107,7 @@ def parse_args():
     )
     parser.add_argument(
         "--model",
-        help="Model to use (e.g., claude-sonnet-4-5-20250929, gpt-5-mini, gemini-3-pro-preview). Provider is auto-detected from model name.",
+        help="Model to use (e.g., grok-4-1-fast-reasoning, claude-sonnet-4-5-20250929, gpt-5-mini, gemini-3-pro-preview). Provider is auto-detected from model name.",
     )
     parser.add_argument(
         "--auto-approve",
@@ -186,6 +186,7 @@ async def simple_cli(
     # Display model info
     if settings.model_name and settings.model_provider:
         provider_display = {
+            "xai": "X.AI",
             "openai": "OpenAI",
             "anthropic": "Anthropic",
             "google": "Google",

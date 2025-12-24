@@ -141,6 +141,7 @@ class Settings:
     Attributes:
         project_root: Current project root directory (if in a git project)
 
+        xai_api_key: X.AI API key if available
         openai_api_key: OpenAI API key if available
         anthropic_api_key: Anthropic API key if available
         tavily_api_key: Tavily API key if available
@@ -149,6 +150,7 @@ class Settings:
     """
 
     # API keys
+    xai_api_key: str | None
     openai_api_key: str | None
     anthropic_api_key: str | None
     google_api_key: str | None
@@ -160,7 +162,7 @@ class Settings:
 
     # Model configuration
     model_name: str | None = None  # Currently active model name
-    model_provider: str | None = None  # Provider (openai, anthropic, google)
+    model_provider: str | None = None  # Provider (xai, openai, anthropic, google)
 
     # Project information
     project_root: Path | None = None
@@ -176,6 +178,7 @@ class Settings:
             Settings instance with detected configuration
         """
         # Detect API keys
+        xai_key = os.environ.get("XAI_API_KEY")
         openai_key = os.environ.get("OPENAI_API_KEY")
         anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
         google_key = os.environ.get("GOOGLE_API_KEY")
@@ -193,6 +196,7 @@ class Settings:
         project_root = _find_project_root(start_path)
 
         return cls(
+            xai_api_key=xai_key,
             openai_api_key=openai_key,
             anthropic_api_key=anthropic_key,
             google_api_key=google_key,
@@ -206,6 +210,11 @@ class Settings:
     def has_openai(self) -> bool:
         """Check if OpenAI API key is configured."""
         return self.openai_api_key is not None
+
+    @property
+    def has_xai(self) -> bool:
+        """Check if X.AI API key is configured."""
+        return self.xai_api_key is not None
 
     @property
     def has_anthropic(self) -> bool:
@@ -407,9 +416,11 @@ def _detect_provider(model_name: str) -> str | None:
         model_name: Model name to detect provider from
 
     Returns:
-        Provider name (openai, anthropic, google) or None if can't detect
+        Provider name (xai, openai, anthropic, google) or None if can't detect
     """
     model_lower = model_name.lower()
+    if "grok" in model_lower or model_lower.startswith("xai:"):
+        return "xai"
     if any(x in model_lower for x in ["gpt", "o1", "o3"]):
         return "openai"
     if "claude" in model_lower:
@@ -428,7 +439,7 @@ def create_model(model_name_override: str | None = None) -> BaseChatModel:
         model_name_override: Optional model name to use instead of environment variable
 
     Returns:
-        ChatModel instance (OpenAI, Anthropic, or Google)
+        ChatModel instance (X.AI, OpenAI, Anthropic, or Google)
 
     Raises:
         SystemExit if no API key is configured or model provider can't be determined
@@ -445,10 +456,16 @@ def create_model(model_name_override: str | None = None) -> BaseChatModel:
             console.print("  - OpenAI: gpt-*, o1-*, o3-*")
             console.print("  - Anthropic: claude-*")
             console.print("  - Google: gemini-*")
+            console.print("  - X.AI: grok-*")
             sys.exit(1)
 
         # Check if API key for detected provider is available
-        if provider == "openai" and not settings.has_openai:
+        if provider == "xai" and not settings.has_xai:
+            console.print(
+                f"[bold red]Error:[/bold red] Model '{model_name_override}' requires XAI_API_KEY"
+            )
+            sys.exit(1)
+        elif provider == "openai" and not settings.has_openai:
             console.print(
                 f"[bold red]Error:[/bold red] Model '{model_name_override}' requires OPENAI_API_KEY"
             )
@@ -466,6 +483,9 @@ def create_model(model_name_override: str | None = None) -> BaseChatModel:
 
         model_name = model_name_override
     # Use environment variable defaults, detect provider by API key priority
+    elif settings.has_xai:
+        provider = "xai"
+        model_name = os.environ.get("XAI_MODEL", "grok-4-1-fast-reasoning")
     elif settings.has_openai:
         provider = "openai"
         model_name = os.environ.get("OPENAI_MODEL", "gpt-5-mini")
@@ -478,10 +498,12 @@ def create_model(model_name_override: str | None = None) -> BaseChatModel:
     else:
         console.print("[bold red]Error:[/bold red] No API key configured.")
         console.print("\nPlease set one of the following environment variables:")
+        console.print("  - XAI_API_KEY       (for Grok models like grok-4-1-fast-reasoning)")
         console.print("  - OPENAI_API_KEY     (for OpenAI models like gpt-5-mini)")
         console.print("  - ANTHROPIC_API_KEY  (for Claude models)")
         console.print("  - GOOGLE_API_KEY     (for Google Gemini models)")
         console.print("\nExample:")
+        console.print("  export XAI_API_KEY=your_api_key_here")
         console.print("  export OPENAI_API_KEY=your_api_key_here")
         console.print("\nOr add it to your .env file.")
         sys.exit(1)
@@ -491,6 +513,10 @@ def create_model(model_name_override: str | None = None) -> BaseChatModel:
     settings.model_provider = provider
 
     # Create and return the model
+    if provider == "xai":
+        from langchain_xai import ChatXAI
+
+        return ChatXAI(model=model_name, temperature=0)
     if provider == "openai":
         from langchain_openai import ChatOpenAI
 

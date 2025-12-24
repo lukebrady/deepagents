@@ -115,6 +115,16 @@ agent = create_deep_agent(
 )
 ```
 
+Deep Agents work with Anthropic, OpenAI, Google, and X.AI models via their LangChain chat wrappers. For Grok models, use `ChatXAI` from the [`langchain-xai`](https://docs.langchain.com/oss/python/integrations/providers/xai) integration:
+
+```python
+from langchain_xai import ChatXAI
+from deepagents import create_deep_agent
+
+grok_model = ChatXAI(model="grok-4-1-fast-reasoning", temperature=0)
+agent = create_deep_agent(model=grok_model)
+```
+
 ### `system_prompt`
 Deep Agents come with a built-in system prompt. This is relatively detailed prompt that is heavily based on and inspired by [attempts](https://github.com/kn1026/cc/blob/main/claudecode.md) to [replicate](https://github.com/asgeirtj/system_prompts_leaks/blob/main/Anthropic/claude-code.md)
 Claude Code's system prompt. It was made more general purpose than Claude Code's system prompt. The default prompt contains detailed instructions for how to use the built-in planning tool, file system tools, and sub agents.

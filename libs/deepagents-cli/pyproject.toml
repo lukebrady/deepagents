@@ -10,6 +10,7 @@ dependencies = [
   "requests",
   "rich>=13.0.0",
   "prompt-toolkit>=3.0.52",
+  "langchain-xai>=1.1.0",
   "langchain-openai>=0.1.0",
   "tavily-python",
   "python-dotenv",

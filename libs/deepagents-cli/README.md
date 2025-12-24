@@ -38,6 +38,9 @@ deepagents
 deepagents help
 ```
 
+> [!NOTE]
+> If `XAI_API_KEY` is set, `deepagents-cli` defaults to Grok (`grok-4-1-fast-reasoning`) and auto-detects other Grok variants when you pass `--model`.
+
 **Common options:**
 ```bash
 # Use a specific agent configuration
@@ -59,15 +62,19 @@ Type naturally as you would in a chat interface. The agent will use its built-in
 
 ## Model Configuration
 
-The CLI supports three LLM providers with automatic provider detection based on model name:
+The CLI supports four LLM providers with automatic provider detection based on model name:
 
 **Supported Providers:**
+- **X.AI (Grok)** - Models like `grok-4-1-fast-reasoning`, `grok-4-1-fast-non-reasoning`, `grok-code-fast-1` (default: `grok-4-1-fast-reasoning`)
 - **OpenAI** - Models like `gpt-4o`, `gpt-5-mini`, `o1-preview`, `o3-mini` (default: `gpt-5-mini`)
 - **Anthropic** - Models like `claude-sonnet-4-5-20250929`, `claude-3-opus-20240229` (default: `claude-sonnet-4-5-20250929`)
 - **Google** - Models like `gemini-3-pro-preview`, `gemini-1.5-pro` (default: `gemini-3-pro-preview`)
 
 **Specify model at startup:**
 ```bash
+# Auto-detects X.AI from model name pattern
+deepagents --model grok-4-1-fast-reasoning
+
 # Auto-detects Anthropic from model name pattern
 deepagents --model claude-sonnet-4-5-20250929
 
@@ -78,11 +85,13 @@ deepagents --model gpt-4o
 **Or use environment variables:**
 ```bash
 # Set provider-specific model defaults
+export XAI_MODEL="grok-4-1-fast-reasoning"
 export ANTHROPIC_MODEL="claude-sonnet-4-5-20250929"
 export OPENAI_MODEL="gpt-4o"
 export GOOGLE_MODEL="gemini-1.5-pro"
 
 # Set API keys (required)
+export XAI_API_KEY="your-key"
 export ANTHROPIC_API_KEY="your-key"
 export OPENAI_API_KEY="your-key"
 export GOOGLE_API_KEY="your-key"
@@ -91,6 +100,7 @@ export GOOGLE_API_KEY="your-key"
 **Model name conventions:**
 
 Model names follow each provider's official naming convention:
+- **X.AI**: See [X.AI Models Documentation](https://docs.x.ai/docs/models) for Grok variants
 - **OpenAI**: See [OpenAI Models Documentation](https://platform.openai.com/docs/models)
 - **Anthropic**: See [Anthropic Models Documentation](https://docs.anthropic.com/en/docs/about-claude/models)
 - **Google**: See [Google Gemini Models Documentation](https://ai.google.dev/gemini-api/docs/models/gemini)
